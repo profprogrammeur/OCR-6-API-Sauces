@@ -1,21 +1,21 @@
-const Thing = require('../models/thing');
+const Sauce = require('../models/sauce');
 const fs = require('fs');
 
-exports.createThing = (req, res, next) => {
-    const thingObject = JSON.parse(req.body.sauce);
+exports.createSauce = (req, res, next) => {
+    const sauceObject = JSON.parse(req.body.sauce);
 
     console.log(req.body.sauce);
-    const thing = new Thing({
-        ...thingObject,
+    const sauce = new Sauce({
+        ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
     });
-    thing.likes = 0
-    thing.dislikes = 0
-    thing.usersLiked = [];
-    thing.usersDisliked = [];
+    sauce.likes = 0
+    sauce.dislikes = 0
+    sauce.usersLiked = [];
+    sauce.usersDisliked = [];
 
-    console.log(thing);
-    thing.save().then(
+    console.log(sauce);
+    sauce.save().then(
         () => {
             res.status(201).json({
                 message: 'Post saved successfully!'
@@ -31,12 +31,12 @@ exports.createThing = (req, res, next) => {
     );
 };
 
-exports.getOneThing = (req, res, next) => {
-    Thing.findOne({
+exports.getOneSauce = (req, res, next) => {
+    Sauce.findOne({
         _id: req.params.id
     }).then(
-        (thing) => {
-            res.status(200).json(thing);
+        (sauce) => {
+            res.status(200).json(sauce);
         }
     ).catch(
         (error) => {
@@ -49,18 +49,18 @@ exports.getOneThing = (req, res, next) => {
 
 
 
-exports.likeThing = (req, res, next) => {
+exports.likeSauce = (req, res, next) => {
 
     switch (req.body.like) {
         case 1:
-            Thing.findOneAndUpdate({
+            Sauce.findOneAndUpdate({
                 _id: req.params.id
             }, { $addToSet: { usersLiked: req.body.userId }, $inc: { likes: 1 } })
 
                 .then(
                     () => {
                         res.status(201).json({
-                            message: 'Thing updated successfully!'
+                            message: 'Sauce updated successfully!'
                         });
                     }
                 )
@@ -73,16 +73,16 @@ exports.likeThing = (req, res, next) => {
                 );
             break;
         case -1:
-            Thing.findOneAndUpdate({
+            Sauce.findOneAndUpdate({
                 _id: req.params.id
             }, { $addToSet: { usersDisliked: req.body.userId }, $inc: { dislikes: 1 } })
 
 
                 .then(
-                    (thing) => {
+                    (sauce) => {
 
                         res.status(201).json({
-                            message: 'Thing updated successfully!'
+                            message: 'Sauce updated successfully!'
                         });
                     }
                 ).catch(
@@ -95,11 +95,11 @@ exports.likeThing = (req, res, next) => {
             break;
 
         case 0:
-            Thing.findOne({_id: req.params.id})
-                .then(thing => {
-                    if (thing.usersLiked.includes(req.body.userId))
+            Sauce.findOne({_id: req.params.id})
+                .then(sauce => {
+                    if (sauce.usersLiked.includes(req.body.userId))
                     {
-                        Thing.findOneAndUpdate({ _id: req.params.id },
+                        Sauce.findOneAndUpdate({ _id: req.params.id },
                             { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } })
                             .then(
                                 () => {
@@ -120,10 +120,10 @@ exports.likeThing = (req, res, next) => {
                             
  
                     } else if(
-                        thing.usersDisliked.includes(req.body.userId)
+                        sauce.usersDisliked.includes(req.body.userId)
                     )
                     {
-                        Thing.findOneAndUpdate({ _id: req.params.id },
+                        Sauce.findOneAndUpdate({ _id: req.params.id },
                             { $pull: { usersDisliked: req.body.userId }, $inc: { dislikes: -1 } })
                             .then(
                                 () => {
@@ -142,7 +142,7 @@ exports.likeThing = (req, res, next) => {
                     } 
   
                     res.status(201).json({
-                        message: 'Thing updated successfully!'
+                        message: 'Sauce updated successfully!'
                     });
 
                 })
@@ -156,19 +156,19 @@ exports.likeThing = (req, res, next) => {
     }
 };
 
-exports.modifyThing = (req, res, next) => {
+exports.modifySauce = (req, res, next) => {
 
-    const thingObject = req.file ?
+    const sauceObject = req.file ?
         {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
 
         } : { ...req.body };
 
-    Thing.updateOne({ _id: req.params.id }, { ...thingObject, id_: req.params.id })
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, id_: req.params.id })
         .then(() => {
             res.status(201).json({
-                message: 'Thing updated successfully!'
+                message: 'Sauce updated successfully!'
             });
         }
         ).catch(
@@ -180,12 +180,12 @@ exports.modifyThing = (req, res, next) => {
         );
 };
 
-exports.deleteThing = (req, res, next) => {
-    Thing.findOne({ _id: req.params.id })
-        .then(thing => {
-            const filename = thing.imageUrl.split('/images/')[1];
+exports.deleteSauce= (req, res, next) => {
+    Sauce.findOne({ _id: req.params.id })
+        .then(sauce => {
+            const filename = sauce.imageUrl.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
-                Thing.deleteOne({ _id: req.params.id })
+                Sauce.deleteOne({ _id: req.params.id })
                 .then(
                     () => {
                         res.status(200).json({
@@ -205,10 +205,10 @@ exports.deleteThing = (req, res, next) => {
         );
 };
 
-exports.getAllStuff = (req, res, next) => {
-    Thing.find().then(
-        (things) => {
-            res.status(200).json(things);
+exports.getAllSauces = (req, res, next) => {
+    Sauce.find().then(
+        (sauces) => {
+            res.status(200).json(sauces);
         }
     ).catch(
         (error) => {

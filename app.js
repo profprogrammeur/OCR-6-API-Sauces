@@ -6,7 +6,7 @@ const path = require('path');
 
 // const Thing = require('./models/thing');
 
-const stuffRoutes = require('./routes/stuff');
+// const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
 
@@ -15,7 +15,7 @@ const saucesRoutes = require('./routes/sauces');
 mongoose.set('useFindAndModify', false);
 
 
-mongoose.connect('mongodb+srv://antra:talata@antcluster-zvn53.gcp.mongodb.net/test?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://antra:QT0SS39NHsIh1RRh@antcluster-zvn53.gcp.mongodb.net/test?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true
