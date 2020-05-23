@@ -19,7 +19,7 @@ exports.signup = (req, res, next) => {
     //         return res.status(422).json({ errors: errors.array() });
     //     } 
 
-    if (req.body.password.length > 7) {
+    // if (req.body.password.length > 7) {
 
          bcrypt.hash(req.body.password, 10)
         
@@ -35,7 +35,7 @@ exports.signup = (req, res, next) => {
         //500 = erreur server
         .catch(error => res.status(500).json({ error }));
     // } else (res.status(500).json({ 'mot de passe trop court' }));
-    } else { res.status(500).json({ message : 'mot de passe trop court' })}
+    // } else { res.status(500).json({ message : 'mot de passe trop court' })}
     }
    
 
