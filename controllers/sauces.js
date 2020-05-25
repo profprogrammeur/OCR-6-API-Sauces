@@ -95,10 +95,9 @@ exports.likeSauce = (req, res, next) => {
             break;
 
         case 0:
-            Sauce.findOne({_id: req.params.id})
+            Sauce.findOne({ _id: req.params.id })
                 .then(sauce => {
-                    if (sauce.usersLiked.includes(req.body.userId))
-                    {
+                    if (sauce.usersLiked.includes(req.body.userId)) {
                         Sauce.findOneAndUpdate({ _id: req.params.id },
                             { $pull: { usersLiked: req.body.userId }, $inc: { likes: -1 } })
                             .then(
@@ -106,23 +105,16 @@ exports.likeSauce = (req, res, next) => {
                                     res.status(201).json({
                                         message: 'Updated!'
                                     });
-                                    // console.log("Not Liked")
                                 }
-                        ).catch(
-                            (error) => {
-                                // res.status(404).json({
-                                //     error: error
-                                // });
-                                console.log("Not Liked")
+                            ).catch(
+                                (error) => {
+                                    console.log("Not Liked")
+                                }
+                            );
 
-                            }
-                        );
-                            
- 
-                    } else if(
+                    } else if (
                         sauce.usersDisliked.includes(req.body.userId)
-                    )
-                    {
+                    ) {
                         Sauce.findOneAndUpdate({ _id: req.params.id },
                             { $pull: { usersDisliked: req.body.userId }, $inc: { dislikes: -1 } })
                             .then(
@@ -131,25 +123,23 @@ exports.likeSauce = (req, res, next) => {
                                         message: 'Updated!'
                                     });
                                 }
-                        ).catch(
-                            (error) => {
-                            //     res.status(404).json({
-                            //         error: error
-                            //     });
-                            console.log("Not disLiked")
-                            }
-                        );
-                    } 
-  
+                            ).catch(
+                                (error) => {
+                                    console.log("Not disLiked")
+                                }
+                            );
+                    }
+
                     res.status(201).json({
                         message: 'Sauce updated successfully!'
                     });
 
                 })
-                .catch((error) => {res.status(404).json({error: error});
+                .catch((error) => {
+                    res.status(404).json({ error: error });
                 }
-            );
-     
+                );
+
             break;
         default:
             console.log("rien")
@@ -180,24 +170,24 @@ exports.modifySauce = (req, res, next) => {
         );
 };
 
-exports.deleteSauce= (req, res, next) => {
+exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {
             const filename = sauce.imageUrl.split('/images/')[1];
             fs.unlink(`images/${filename}`, () => {
                 Sauce.deleteOne({ _id: req.params.id })
-                .then(
-                    () => {
-                        res.status(200).json({
-                            message: 'Deleted!'
-                        });
-                    }
-                ).catch(
-                    (error) => {
-                        res.status(400).json({
-                            error: error
-                        });
-                    })
+                    .then(
+                        () => {
+                            res.status(200).json({
+                                message: 'Deleted!'
+                            });
+                        }
+                    ).catch(
+                        (error) => {
+                            res.status(400).json({
+                                error: error
+                            });
+                        })
             })
                 .catch(error => res.status(500).json({ error }));
 
