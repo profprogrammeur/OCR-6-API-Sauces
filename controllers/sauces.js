@@ -4,7 +4,7 @@ const fs = require('fs');
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
 
-    console.log(req.body.sauce);
+    // console.log(req.body.sauce);
     const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -14,7 +14,7 @@ exports.createSauce = (req, res, next) => {
     sauce.usersLiked = [];
     sauce.usersDisliked = [];
 
-    console.log(sauce);
+    // console.log(sauce);
     sauce.save().then(
         () => {
             res.status(201).json({
@@ -23,7 +23,6 @@ exports.createSauce = (req, res, next) => {
         }
     ).catch(
         (error) => {
-            console.log(error);
             res.status(400).json({
                 error: error
             });
@@ -108,7 +107,7 @@ exports.likeSauce = (req, res, next) => {
                                 }
                             ).catch(
                                 (error) => {
-                                    console.log("Not Liked")
+                                    console.log("Not Liked")                                  
                                 }
                             );
 
@@ -124,7 +123,7 @@ exports.likeSauce = (req, res, next) => {
                                     });
                                 }
                             ).catch(
-                                (error) => {
+                                (error) => {                                
                                     console.log("Not disLiked")
                                 }
                             );
