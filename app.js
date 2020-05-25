@@ -4,8 +4,6 @@ const mongoose = require('mongoose');
 const app = express();
 const path = require('path');
 
-// const Thing = require('./models/thing');
-
 // const stuffRoutes = require('./routes/stuff');
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
@@ -31,23 +29,10 @@ app.use((req, res, next) => {
     next();
 });
 
-///////////////
-// app.use('/api/auth/signup', (req, res, next) => {
-// app.use('/api/auth/login', (req,res,next)=>{
-//     const stuff = [
-//         {
-//             message: "IjZAgcfl7p92ldGxad68LJZdL17lhWy",
-//         }
-//     ];
-//     res.status(200).json(stuff);
-//     next();
-// });
-///////////////////
 app.use(bodyParser.json());
 
-app.use('/images', express.static(path.join(__dirname,'images')));
+app.use('/images', express.static(path.join(__dirname, 'images')));
 
-// app.use('/api/stuff', stuffRoutes);
 app.use('/api/auth', userRoutes);
 app.use('/api/sauces', saucesRoutes);
 

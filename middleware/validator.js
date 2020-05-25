@@ -27,17 +27,7 @@ const userValidationRules = () => {
     return [
         // username must be an email
         body('email').isEmail(),
-        // password must be at least 5 chars long
-
         // body('password').isLength({ min: 12 })
-        
-        // body('password').matches(),
-        // password must be at least 5 chars long
-        // body('sauce'),
-        // body('image'),
-
-
-
     ]
 }
 
