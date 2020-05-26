@@ -1,3 +1,5 @@
+require('dotenv').config();
+const mongoKey = process.env.MONGOKEY
 const express = require('express');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
@@ -12,7 +14,7 @@ const saucesRoutes = require('./routes/sauces');
 mongoose.set('useFindAndModify', false);
 
 
-mongoose.connect('mongodb+srv://antra:QT0SS39NHsIh1RRh@antcluster-zvn53.gcp.mongodb.net/test?retryWrites=true&w=majority',
+mongoose.connect('mongodb+srv://antra:'+mongoKey+'@antcluster-zvn53.gcp.mongodb.net/test?retryWrites=true&w=majority',
     {
         useNewUrlParser: true,
         useUnifiedTopology: true

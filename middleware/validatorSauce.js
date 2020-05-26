@@ -10,26 +10,31 @@
 
 
 const { body, validationResult } = require('express-validator')
+// var aa = body('sauce')
+// JSON.parse(aa);
+// console.log(aa)
 const userValidationRules = () => {
+    // console.log(aa);
     return [
         // username must be an email
-        body('email')
-            .isEmail()
-            .normalizeEmail(),
+        // body('email')
+        //     .isEmail()
+        //     .normalizeEmail(),
 
-        body('password')
-            .isLength({ min: 12 }).withMessage('Password must contain at least 12 characters in length.')
-            .matches('[0-9]').withMessage('Password must contain at least 1 number.')
-            .matches('[a-z]').withMessage('Password must contain at least 1 lowercase letter.')
-            .matches('[A-Z]').withMessage('Password must contain at least 1 uppercase letter.'),
+        // body('password')
+        //     .isLength({ min: 12 }).withMessage('Password must contain at least 12 characters in length.')
+        //     .matches('[0-9]').withMessage('Password must contain at least 1 number.')
+        //     .matches('[a-z]').withMessage('Password must contain at least 1 lowercase letter.')
+        //     .matches('[A-Z]').withMessage('Password must contain at least 1 uppercase letter.'),
             // .matches(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*$/,)
             // .isInt({min : 2}),
-
-        // body('sauce').isAlpha()   
+// true
+        // body('sauce').isJSON()
     ]
 }
 
 const validate = (req, res, next) => {
+    // console.log(req)
     const errors = validationResult(req)
     if (errors.isEmpty()) {
         return next()
