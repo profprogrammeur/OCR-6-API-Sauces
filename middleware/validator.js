@@ -1,11 +1,23 @@
 
+// var passwordValidator = require('password-validator');
+// var schema = new passwordValidator();
+// schema
+//     .is().min(8)                                    // Minimum length 8
+//     .is().max(100)                                  // Maximum length 100
+//     .has().uppercase()                              // Must have uppercase letters
+//     .has().lowercase()                              // Must have lowercase letters
+//     .has().digits()     
+
 
 const { body, validationResult } = require('express-validator')
 const userValidationRules = () => {
     return [
         // username must be an email
         body('email').isEmail(),
-        // body('password').isLength({ min: 12 })
+        body('password')
+        .isLength({ min: 3 })
+        .matches(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*$/,)
+        // .isInt({min : 2}),
     ]
 }
 
@@ -25,4 +37,5 @@ const validate = (req, res, next) => {
 module.exports = {
     userValidationRules,
     validate,
+    // passwordValidator
 }
