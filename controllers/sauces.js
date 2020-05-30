@@ -1,10 +1,15 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
+const expressSanitizer = require('express-sanitizer');
+
+const Entities = require('html-entities').XmlEntities;
+
+const entities = new Entities();
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
 
-    // console.log(req.body.sauce);
+    // retrieve url of newly saved image from multer
     const sauce = new Sauce({
         ...sauceObject,
         imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
@@ -14,7 +19,6 @@ exports.createSauce = (req, res, next) => {
     sauce.usersLiked = [];
     sauce.usersDisliked = [];
 
-    // console.log(sauce);
     sauce.save().then(
         () => {
             res.status(201).json({
@@ -107,7 +111,7 @@ exports.likeSauce = (req, res, next) => {
                                 }
                             ).catch(
                                 (error) => {
-                                    console.log("Not Liked")                                  
+                                    console.log("Not Liked")
                                 }
                             );
 
@@ -123,7 +127,7 @@ exports.likeSauce = (req, res, next) => {
                                     });
                                 }
                             ).catch(
-                                (error) => {                                
+                                (error) => {
                                     console.log("Not disLiked")
                                 }
                             );
@@ -145,14 +149,18 @@ exports.likeSauce = (req, res, next) => {
     }
 };
 
-exports.modifySauce = (req, res, next) => {
 
+exports.modifySauce = (req, res, next) => {
+    console.log(entities.encode(req.body.name))
+    req.body.name = entities.encode(req.body.name)
+    //ternary operator to check if there's a new image
     const sauceObject = req.file ?
         {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
-
         } : { ...req.body };
+
+
 
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, id_: req.params.id })
         .then(() => {
@@ -169,6 +177,8 @@ exports.modifySauce = (req, res, next) => {
         );
 };
 
+//find the sauce in data base, extract the name of file to delete, delete with file with fs.unlink,
+//eventually remove sauce from the data base
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
         .then(sauce => {

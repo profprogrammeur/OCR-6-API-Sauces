@@ -10,6 +10,7 @@
 
 
 const { body, validationResult } = require('express-validator')
+
 const userValidationRules = () => {
     return [
         // username must be an email
@@ -17,15 +18,16 @@ const userValidationRules = () => {
             .isEmail()
             .normalizeEmail(),
 
+       
+            
+            
+
+
         body('password')
             .isLength({ min: 12 }).withMessage('Password must contain at least 12 characters in length.')
             .matches('[0-9]').withMessage('Password must contain at least 1 number.')
             .matches('[a-z]').withMessage('Password must contain at least 1 lowercase letter.')
-            .matches('[A-Z]').withMessage('Password must contain at least 1 uppercase letter.'),
-            // .matches(/^(?=.*[0-9])(?=.*[a-z])(?=.*[A-Z])(?=.*[\W_]).*$/,)
-            // .isInt({min : 2}),
-
-        // body('sauce').isAlpha()   
+            .matches('[A-Z]').withMessage('Password must contain at least 1 uppercase letter.')
     ]
 }
 
@@ -45,6 +47,5 @@ const validate = (req, res, next) => {
 
 module.exports = {
     userValidationRules,
-    validate,
-    // passwordValidator
+    validate
 }

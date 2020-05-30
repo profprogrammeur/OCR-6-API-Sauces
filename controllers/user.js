@@ -4,7 +4,6 @@ const User = require('../models/User');
 
 
 exports.signup = (req, res, next) => {
-    // if (req.body.password.length > 7) {
     bcrypt.hash(req.body.password, 10)
 
         .then(hash => {
