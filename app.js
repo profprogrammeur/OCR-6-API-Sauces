@@ -9,8 +9,15 @@ const app = express();
 const path = require('path');
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
+const mongoSanitize = require('express-mongo-sanitize');
+
+app.use(bodyParser.urlencoded({ extended: true }));
 
 app.use(bodyParser.json());
+
+app.use(mongoSanitize({
+    replaceWith: '_'
+}))
 
 mongoose.set('useFindAndModify', false);
 

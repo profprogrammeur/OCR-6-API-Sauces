@@ -1,10 +1,10 @@
 const Sauce = require('../models/sauce');
 const fs = require('fs');
-const expressSanitizer = require('express-sanitizer');
-
 const Entities = require('html-entities').XmlEntities;
-
 const entities = new Entities();
+// const mongoSanitize = require('express-mongo-sanitize');
+var sanitize = require('mongo-sanitize');
+
 
 exports.createSauce = (req, res, next) => {
     const sauceObject = JSON.parse(req.body.sauce);
@@ -18,6 +18,10 @@ exports.createSauce = (req, res, next) => {
     sauce.dislikes = 0
     sauce.usersLiked = [];
     sauce.usersDisliked = [];
+    sauce.name = entities.encode(sauce.name)
+    sauce.manufacturer = entities.encode(sauce.manufacturer)
+    sauce.description = entities.encode(sauce.description)
+    sauce.mainPepper = entities.encode(sauce.mainPepper)
 
     sauce.save().then(
         () => {
@@ -151,16 +155,18 @@ exports.likeSauce = (req, res, next) => {
 
 
 exports.modifySauce = (req, res, next) => {
-    console.log(entities.encode(req.body.name))
-    req.body.name = entities.encode(req.body.name)
+    console.log(req.body)
     //ternary operator to check if there's a new image
     const sauceObject = req.file ?
         {
             ...JSON.parse(req.body.sauce),
             imageUrl: `${req.protocol}://${req.get('host')}/images/${req.file.filename}`
         } : { ...req.body };
-
-
+    // console.log(req.params.id )
+    sauceObject.name = entities.encode(sauceObject.name)
+    sauceObject.manufacturer = entities.encode(sauceObject.manufacturer)
+    sauceObject.description = entities.encode(sauceObject.description)
+    sauceObject.mainPepper = entities.encode(sauceObject.mainPepper)
 
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, id_: req.params.id })
         .then(() => {
