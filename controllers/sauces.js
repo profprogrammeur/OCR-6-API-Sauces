@@ -168,7 +168,7 @@ exports.modifySauce = (req, res, next) => {
     sauceObject.description = entities.encode(sauceObject.description)
     sauceObject.mainPepper = entities.encode(sauceObject.mainPepper)
 
-    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, id_: req.params.id })
+    Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, id_: req.params.id },{ runValidators: true })
         .then((sauce) => {
             res.status(201).json({
                 message: 'Sauce updated successfully!'
@@ -183,7 +183,7 @@ exports.modifySauce = (req, res, next) => {
         );
 };
 
-//find the sauce in data base, extract the name of file to delete, delete with file with fs.unlink,
+//find the sauce in database, extract the name of file to delete, delete with file with fs.unlink,
 //eventually remove sauce from the data base
 exports.deleteSauce = (req, res, next) => {
     Sauce.findOne({ _id: req.params.id })
