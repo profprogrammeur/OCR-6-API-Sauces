@@ -169,7 +169,7 @@ exports.modifySauce = (req, res, next) => {
     sauceObject.mainPepper = entities.encode(sauceObject.mainPepper)
 
     Sauce.updateOne({ _id: req.params.id }, { ...sauceObject, id_: req.params.id })
-        .then(() => {
+        .then((sauce) => {
             res.status(201).json({
                 message: 'Sauce updated successfully!'
             });
