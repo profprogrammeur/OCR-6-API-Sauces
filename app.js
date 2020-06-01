@@ -9,12 +9,14 @@ const app = express();
 const path = require('path');
 const userRoutes = require('./routes/user');
 const saucesRoutes = require('./routes/sauces');
+
+//sanitizer
 const mongoSanitize = require('express-mongo-sanitize');
-
+// especially for express-mongo-sanitize
 app.use(bodyParser.urlencoded({ extended: true }));
-
+// general parser
 app.use(bodyParser.json());
-
+// Replace any prohibited characters in keys
 app.use(mongoSanitize({
     replaceWith: '_'
 }))
